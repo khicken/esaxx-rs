@@ -4,7 +4,7 @@ fn main() {
     cc::Build::new()
         .cpp(true)
         .flag("-std=c++11")
-        .static_crt(true)
+        .static_crt(target_is_static_msvc())
         .file("src/esaxx.cpp")
         .include("src")
         .compile("esaxx");
@@ -25,3 +25,8 @@ fn main() {
 
 #[cfg(not(feature = "cpp"))]
 fn main() {}
+
+fn target_is_static_msvc() -> bool {
+    let target = std::env::var("TARGET").unwrap_or_default();
+    if target.contains("msvc") { false } else { true }
+}
